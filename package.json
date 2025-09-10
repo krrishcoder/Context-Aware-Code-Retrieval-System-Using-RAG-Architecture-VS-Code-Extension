@@ -3,12 +3,12 @@
   "displayName": "RAGsearch",
   "description": "VS Code extension for context-aware code search and modification using RAG architecture.",
   "publisher": "krrishcoder07",
-  "icon":"spider.png", 
-   "repository": {
+  "icon": "spider.png",
+  "repository": {
     "type": "git",
     "url": "https://github.com/krrishcoder/Context-Aware-Code-Retrieval-System-Using-RAG-Architecture-VS-Code-Extension"
   },
-  "version": "0.0.2",
+  "version": "0.0.3",
   "engines": {
     "vscode": "^1.103.0"
   },
@@ -16,13 +16,17 @@
     "Debuggers",
     "Other"
   ],
-  "activationEvents": ["onCommand:krrishcoder.searchCode"],
+  "activationEvents": [
+    "onCommand:krrishcoder.searchCode"
+  ],
   "main": "./extension.js",
   "contributes": {
-    "commands": [{
-      "command": "krrishcoder.searchCode",
-      "title": "Search Python Code"
-    }]
+    "commands": [
+      {
+        "command": "krrishcoder.searchCode",
+        "title": "Search Python Code"
+      }
+    ]
   },
   "scripts": {
     "lint": "eslint .",
