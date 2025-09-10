@@ -4,7 +4,6 @@ from rag import get_chunks,final_lines_founded
 
 
 
-
 query = sys.argv[1]
 folder_path = sys.argv[2]
 

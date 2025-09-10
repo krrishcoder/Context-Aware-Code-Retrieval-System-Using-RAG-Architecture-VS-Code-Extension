@@ -1,15 +1,22 @@
 {
-  "name": "krrishcoder",
-  "displayName": "ctrlF",
-  "description": "to use RAG for searching and modifying code",
-  "version": "0.0.1",
+  "name": "krrishcoder07",
+  "displayName": "RAGsearch",
+  "description": "VS Code extension for context-aware code search and modification using RAG architecture.",
+  "publisher": "krrishcoder07",
+  "icon":"spider.png", 
+   "repository": {
+    "type": "git",
+    "url": "https://github.com/krrishcoder/Context-Aware-Code-Retrieval-System-Using-RAG-Architecture-VS-Code-Extension"
+  },
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.103.0"
   },
   "categories": [
+    "Debuggers",
     "Other"
   ],
-  "activationEvents": ["*"],
+  "activationEvents": ["onCommand:krrishcoder.searchCode"],
   "main": "./extension.js",
   "contributes": {
     "commands": [{
