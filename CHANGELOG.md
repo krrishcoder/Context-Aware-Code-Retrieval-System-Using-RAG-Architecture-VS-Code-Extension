@@ -6,4 +6,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
-- Initial release
+## [0.0.4]
+
+- Chat UI: show search hits as bullet points
+- Clickable results: supports `file:line: (Symbol)` and opens the correct file
+- Search scans Python files across folders (workspace-relative paths in results)

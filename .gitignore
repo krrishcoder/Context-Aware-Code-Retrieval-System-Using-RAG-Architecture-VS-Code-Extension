@@ -2,3 +2,19 @@ node_modules
 .vscode-test/
 *.vsix
 .env
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# RAG cache
+.cache_rag/
+
+# OS
+.DS_Store
+
+# Local/legacy
+.eslintignore

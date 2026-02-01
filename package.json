@@ -8,28 +8,38 @@
     "type": "git",
     "url": "https://github.com/krrishcoder/Context-Aware-Code-Retrieval-System-Using-RAG-Architecture-VS-Code-Extension"
   },
-  "version": "0.0.3",
+  "version": "0.0.4",
   "engines": {
     "vscode": "^1.103.0"
   },
   "categories": [
-    "Debuggers",
+    "Programming Languages",
     "Other"
   ],
   "activationEvents": [
-    "onCommand:krrishcoder.searchCode"
+    "onStartupFinished",
+    "onCommand:krrishcoder.searchCode",
+    "onCommand:krrishcoder.openChat"
   ],
   "main": "./extension.js",
   "contributes": {
     "commands": [
       {
         "command": "krrishcoder.searchCode",
-        "title": "Search Python Code"
+        "title": "RAG Search: Context-Aware Code Search"
+      },
+      {
+        "command": "krrishcoder.rebuildIndex",
+        "title": "RAG: Rebuild Index"
+      },
+      {
+        "command": "krrishcoder.openChat",
+        "title": "RAG Chat: Ask code questions"
       }
     ]
   },
   "scripts": {
-    "lint": "eslint .",
+    "lint": "NODE_OPTIONS=--max-old-space-size=4096 eslint .",
     "pretest": "npm run lint",
     "test": "vscode-test"
   },

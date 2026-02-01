@@ -2,6 +2,10 @@
 .vscode-test/**
 test/**
 .gitignore
+.eslintignore
+.cache_rag/**
+.venv/**
+__pycache__/**
 .yarnrc
 vsc-extension-quickstart.md
 **/jsconfig.json
