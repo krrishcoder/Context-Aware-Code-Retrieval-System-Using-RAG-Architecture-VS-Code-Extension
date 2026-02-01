@@ -1,4 +1,4 @@
-# KrrishCoder – Context-Aware Code Retrieval
+# KrrishCoder – Context-Aware Code Retrieval [live](https://marketplace.visualstudio.com/items?itemName=krrishcoder07.krrishcoder07&ssr=false#review-details)
 
 This VS Code extension helps developers find relevant parts of their codebase using retrieval-augmented search.
 
