@@ -20,6 +20,7 @@
     "onStartupFinished",
     "onCommand:krrishcoder.searchCode",
     "onCommand:krrishcoder.openChat",
+    "onView:krrishcoder.chat",
     "onView:krrishcoder.actions"
   ],
   "main": "./extension.js",
@@ -52,6 +53,11 @@
     },
     "views": {
       "krrishcoder": [
+        {
+          "id": "krrishcoder.chat",
+          "name": "RAG Chat",
+          "icon": "$(comment-discussion)"
+        },
         {
           "id": "krrishcoder.actions",
           "name": "Code Retrieval"

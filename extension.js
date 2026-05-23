@@ -3,7 +3,6 @@ const { execFile } = require('child_process');
 const path = require('path');
 
 let outputChannel;
-const chatPanels = new Map();
 let pythonExecutablePromise;
 let dependencyInstallPromise;
 
@@ -369,6 +368,69 @@ class RagActionsProvider {
     }
 }
 
+class RagChatProvider {
+    constructor(context) {
+        this.context = context;
+        this.view = null;
+    }
+
+    resolveWebviewView(webviewView) {
+        this.view = webviewView;
+        webviewView.webview.options = { enableScripts: true };
+
+        const wf = vscode.workspace.workspaceFolders;
+        const folder = wf?.[0]?.uri.fsPath;
+        const key = folder ? `chat:${folder}` : null;
+        const history = key ? this.context.workspaceState.get(key, []) : [];
+
+        webviewView.webview.onDidReceiveMessage(async (msg) => {
+            if (msg.type === 'ready') {
+                webviewView.webview.postMessage({ type: 'history', history });
+                return;
+            }
+
+            if (msg.type === 'jump') {
+                jumpToLine(msg);
+                return;
+            }
+
+            if (msg.type === 'query') {
+                if (!key) {
+                    webviewView.webview.postMessage({
+                        type: 'message',
+                        message: { role: 'assistant', text: 'Open a folder first.' },
+                    });
+                    return;
+                }
+
+                const user = { role: 'user', text: msg.text };
+                history.push(user);
+                await this.context.workspaceState.update(key, history);
+                webviewView.webview.postMessage({ type: 'message', message: user });
+
+                runPython(msg.text, (err, lines) => {
+                    const text = err ? err.message : lines.join('\n');
+                    const bot = { role: 'assistant', text };
+                    history.push(bot);
+                    this.context.workspaceState.update(key, history);
+                    webviewView.webview.postMessage({ type: 'message', message: bot });
+                });
+            }
+        });
+
+        webviewView.webview.html = getChatHtml();
+    }
+
+    show() {
+        if (this.view) {
+            this.view.show?.();
+            return;
+        }
+
+        vscode.commands.executeCommand('krrishcoder.chat.focus');
+    }
+}
+
 /* -------------------- ACTIVATE -------------------- */
 
 function activate(context) {
@@ -379,53 +441,17 @@ function activate(context) {
         vscode.window.showWarningMessage(err.message);
     });
 
+    const chatProvider = new RagChatProvider(context);
+    const chatView = vscode.window.registerWebviewViewProvider(
+        'krrishcoder.chat',
+        chatProvider,
+        { webviewOptions: { retainContextWhenHidden: true } }
+    );
+
     const openChat = vscode.commands.registerCommand('krrishcoder.openChat', () => {
         const wf = vscode.workspace.workspaceFolders;
         if (!wf) return vscode.window.showErrorMessage('Open a folder first');
-
-        const folder = wf[0].uri.fsPath;
-        if (chatPanels.has(folder)) return chatPanels.get(folder).reveal();
-
-        const panel = vscode.window.createWebviewPanel(
-            'ragChat',
-            'RAG Chat',
-            vscode.ViewColumn.One,
-            { enableScripts: true }
-        );
-
-        const key = `chat:${folder}`;
-        const history = context.workspaceState.get(key, []);
-
-        panel.webview.onDidReceiveMessage(async (msg) => {
-            if (msg.type === 'ready') {
-                panel.webview.postMessage({ type: 'history', history });
-                return;
-            }
-
-            if (msg.type === 'jump') {
-                jumpToLine(msg);
-                return;
-            }
-
-            if (msg.type === 'query') {
-                const user = { role: 'user', text: msg.text };
-                history.push(user);
-                await context.workspaceState.update(key, history);
-                panel.webview.postMessage({ type: 'message', message: user });
-
-                runPython(msg.text, (err, lines) => {
-                    const text = err ? err.message : lines.join('\n');
-                    const bot = { role: 'assistant', text };
-                    history.push(bot);
-                    context.workspaceState.update(key, history);
-                    panel.webview.postMessage({ type: 'message', message: bot });
-                });
-            }
-        });
-
-        panel.webview.html = getChatHtml();
-        panel.onDidDispose(() => chatPanels.delete(folder));
-        chatPanels.set(folder, panel);
+        chatProvider.show();
     });
 
     const searchCmd = vscode.commands.registerCommand('krrishcoder.searchCode', async () => {
@@ -472,7 +498,7 @@ function activate(context) {
     const actionsProvider = new RagActionsProvider();
     const actionsView = vscode.window.registerTreeDataProvider('krrishcoder.actions', actionsProvider);
 
-    context.subscriptions.push(openChat, searchCmd, rebuildCmd, statusItem, actionsView);
+    context.subscriptions.push(openChat, searchCmd, rebuildCmd, statusItem, actionsView, chatView);
 }
 
 function deactivate() {}
