@@ -8,7 +8,7 @@
     "type": "git",
     "url": "https://github.com/krrishcoder/Context-Aware-Code-Retrieval-System-Using-RAG-Architecture-VS-Code-Extension"
   },
-  "version": "2.0.1",
+  "version": "2.0.3",
   "engines": {
     "vscode": "^1.103.0"
   },
