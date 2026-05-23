@@ -345,28 +345,7 @@ vscode.postMessage({type:'ready'});
 </html>`;
 }
 
-/* -------------------- SIDEBAR -------------------- */
-
-class RagActionsProvider {
-    getTreeItem(item) {
-        return item;
-    }
-
-    getChildren() {
-        return [
-            this.createAction('Ask code questions', 'krrishcoder.openChat', 'comment-discussion'),
-            this.createAction('Search code', 'krrishcoder.searchCode', 'search'),
-            this.createAction('Rebuild index', 'krrishcoder.rebuildIndex', 'refresh'),
-        ];
-    }
-
-    createAction(label, command, icon) {
-        const item = new vscode.TreeItem(label, vscode.TreeItemCollapsibleState.None);
-        item.command = { command, title: label };
-        item.iconPath = new vscode.ThemeIcon(icon);
-        return item;
-    }
-}
+/* -------------------- RIGHT CHAT VIEW -------------------- */
 
 class RagChatProvider {
     constructor(context) {
@@ -427,7 +406,7 @@ class RagChatProvider {
             return;
         }
 
-        vscode.commands.executeCommand('krrishcoder.chat.focus');
+        vscode.commands.executeCommand('krrishcoder.ragChat.focus');
     }
 }
 
@@ -443,7 +422,7 @@ function activate(context) {
 
     const chatProvider = new RagChatProvider(context);
     const chatView = vscode.window.registerWebviewViewProvider(
-        'krrishcoder.chat',
+        'krrishcoder.ragChat',
         chatProvider,
         { webviewOptions: { retainContextWhenHidden: true } }
     );
@@ -495,10 +474,7 @@ function activate(context) {
     statusItem.command = 'krrishcoder.openChat';
     statusItem.show();
 
-    const actionsProvider = new RagActionsProvider();
-    const actionsView = vscode.window.registerTreeDataProvider('krrishcoder.actions', actionsProvider);
-
-    context.subscriptions.push(openChat, searchCmd, rebuildCmd, statusItem, actionsView, chatView);
+    context.subscriptions.push(openChat, searchCmd, rebuildCmd, statusItem, chatView);
 }
 
 function deactivate() {}

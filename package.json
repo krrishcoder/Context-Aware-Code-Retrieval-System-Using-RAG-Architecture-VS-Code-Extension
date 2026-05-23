@@ -20,8 +20,7 @@
     "onStartupFinished",
     "onCommand:krrishcoder.searchCode",
     "onCommand:krrishcoder.openChat",
-    "onView:krrishcoder.chat",
-    "onView:krrishcoder.actions"
+    "onView:krrishcoder.ragChat"
   ],
   "main": "./extension.js",
   "contributes": {
@@ -39,28 +38,29 @@
       {
         "command": "krrishcoder.openChat",
         "title": "RAG Chat: Ask code questions",
-        "icon": "$(comment-discussion)"
+        "icon": {
+          "light": "media/gemini-svg.svg",
+          "dark": "media/gemini-svg.svg"
+        }
       }
     ],
     "viewsContainers": {
-      "activitybar": [
+      "secondarySidebar": [
         {
-          "id": "krrishcoder",
-          "title": "RAG Search",
-          "icon": "media/spider.svg"
+          "id": "krrishcoder-chat",
+          "title": "RAG Chat",
+          "icon": "media/gemini-svg.svg"
         }
       ]
     },
     "views": {
-      "krrishcoder": [
+      "krrishcoder-chat": [
         {
-          "id": "krrishcoder.chat",
+          "type": "webview",
+          "id": "krrishcoder.ragChat",
           "name": "RAG Chat",
-          "icon": "$(comment-discussion)"
-        },
-        {
-          "id": "krrishcoder.actions",
-          "name": "Code Retrieval"
+          "icon": "media/gemini-svg.svg",
+          "visibility": "visible"
         }
       ]
     },
@@ -69,18 +69,6 @@
         {
           "command": "krrishcoder.openChat",
           "group": "navigation@10"
-        }
-      ],
-      "view/title": [
-        {
-          "command": "krrishcoder.openChat",
-          "when": "view == krrishcoder.actions",
-          "group": "navigation@1"
-        },
-        {
-          "command": "krrishcoder.searchCode",
-          "when": "view == krrishcoder.actions",
-          "group": "navigation@2"
         }
       ]
     }
