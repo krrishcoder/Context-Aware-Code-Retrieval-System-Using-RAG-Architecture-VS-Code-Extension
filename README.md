@@ -2,7 +2,6 @@
 
 [View on VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=krrishcoder07.krrishcoder07&ssr=false#review-details)
 
-![demo video](https://github.com/krrishcoder/Context-Aware-Code-Retrieval-System-Using-RAG-Architecture-VS-Code-Extension/blob/main/clideo_editor_7509c440842e4cc9aaf1742489ca8e8c.gif)
 
 KrrishCoder is a VS Code extension that helps developers find relevant code using natural-language, retrieval-augmented search.
 
