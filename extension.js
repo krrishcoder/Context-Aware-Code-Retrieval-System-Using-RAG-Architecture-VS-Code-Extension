@@ -346,6 +346,29 @@ vscode.postMessage({type:'ready'});
 </html>`;
 }
 
+/* -------------------- SIDEBAR -------------------- */
+
+class RagActionsProvider {
+    getTreeItem(item) {
+        return item;
+    }
+
+    getChildren() {
+        return [
+            this.createAction('Ask code questions', 'krrishcoder.openChat', 'comment-discussion'),
+            this.createAction('Search code', 'krrishcoder.searchCode', 'search'),
+            this.createAction('Rebuild index', 'krrishcoder.rebuildIndex', 'refresh'),
+        ];
+    }
+
+    createAction(label, command, icon) {
+        const item = new vscode.TreeItem(label, vscode.TreeItemCollapsibleState.None);
+        item.command = { command, title: label };
+        item.iconPath = new vscode.ThemeIcon(icon);
+        return item;
+    }
+}
+
 /* -------------------- ACTIVATE -------------------- */
 
 function activate(context) {
@@ -440,7 +463,16 @@ function activate(context) {
         );
     });
 
-    context.subscriptions.push(openChat, searchCmd, rebuildCmd);
+    const statusItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
+    statusItem.text = '$(comment-discussion) RAG Chat';
+    statusItem.tooltip = 'Ask questions about your Python codebase';
+    statusItem.command = 'krrishcoder.openChat';
+    statusItem.show();
+
+    const actionsProvider = new RagActionsProvider();
+    const actionsView = vscode.window.registerTreeDataProvider('krrishcoder.actions', actionsProvider);
+
+    context.subscriptions.push(openChat, searchCmd, rebuildCmd, statusItem, actionsView);
 }
 
 function deactivate() {}

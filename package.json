@@ -19,24 +19,65 @@
   "activationEvents": [
     "onStartupFinished",
     "onCommand:krrishcoder.searchCode",
-    "onCommand:krrishcoder.openChat"
+    "onCommand:krrishcoder.openChat",
+    "onView:krrishcoder.actions"
   ],
   "main": "./extension.js",
   "contributes": {
     "commands": [
       {
         "command": "krrishcoder.searchCode",
-        "title": "RAG Search: Context-Aware Code Search"
+        "title": "RAG Search: Context-Aware Code Search",
+        "icon": "$(search)"
       },
       {
         "command": "krrishcoder.rebuildIndex",
-        "title": "RAG: Rebuild Index"
+        "title": "RAG: Rebuild Index",
+        "icon": "$(refresh)"
       },
       {
         "command": "krrishcoder.openChat",
-        "title": "RAG Chat: Ask code questions"
+        "title": "RAG Chat: Ask code questions",
+        "icon": "$(comment-discussion)"
       }
-    ]
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "krrishcoder",
+          "title": "RAG Search",
+          "icon": "media/spider.svg"
+        }
+      ]
+    },
+    "views": {
+      "krrishcoder": [
+        {
+          "id": "krrishcoder.actions",
+          "name": "Code Retrieval"
+        }
+      ]
+    },
+    "menus": {
+      "editor/title": [
+        {
+          "command": "krrishcoder.openChat",
+          "group": "navigation@10"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "krrishcoder.openChat",
+          "when": "view == krrishcoder.actions",
+          "group": "navigation@1"
+        },
+        {
+          "command": "krrishcoder.searchCode",
+          "when": "view == krrishcoder.actions",
+          "group": "navigation@2"
+        }
+      ]
+    }
   },
   "scripts": {
     "lint": "NODE_OPTIONS=--max-old-space-size=4096 eslint .",
